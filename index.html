@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shibarakiri.mp3 - Discord Audio Player</title>
+  <title>Discord Audio Player</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome for icons -->
@@ -64,7 +64,7 @@
         src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=400&auto=format&fit=crop" 
         alt="Audio Cover" 
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        onerror="this.src='https://placehold.co/400x400/2b2d31/ffffff?text=Shibarakiri'"
+        onerror="this.src='https://placehold.co/400x400/2b2d31/ffffff?text=Audio'"
       >
       <!-- Equalizer Overlay (Hidden until playing) -->
       <div id="eqOverlay" class="absolute inset-0 bg-black/50 backdrop-blur-[2px] flex items-center justify-center gap-1.5 opacity-0 transition-opacity duration-300">
@@ -76,17 +76,12 @@
     </div>
 
     <!-- Heading Title -->
-    <h1 class="text-xl font-bold tracking-tight text-white mb-1 text-center">🎵 Shibarakiri.mp3</h1>
+    <h1 class="text-xl font-bold tracking-tight text-white mb-1 text-center">audio.mp3</h1>
     
     <!-- Label -->
     <p class="text-xs font-medium text-slate-400 mb-2 text-center flex items-center justify-center gap-1.5">
       <i class="fa-brands fa-discord text-indigo-400 text-sm"></i>
       <span>Discord Audio Player</span>
-    </p>
-
-    <!-- Description Text -->
-    <p class="text-xs text-slate-300 mb-6 text-center">
-      Click below to listen to the audio.
     </p>
 
     <!-- Main Interactive Play Button -->
@@ -105,8 +100,8 @@
 
   </div>
 
-  <!-- Audio Element -->
-  <audio id="audioElement" src="Shibarakiri.mp3" preload="auto" loop></audio>
+  <!-- Audio Element (sans loop) -->
+  <audio id="audioElement" src="audio.mp3" preload="auto"></audio>
 
   <script>
     const playBtn = document.getElementById('playBtn');
@@ -119,9 +114,9 @@
     let isPlaying = false;
 
     async function handlePlay() {
-      if (isPlaying) return;
-
       try {
+        // Remet l'audio au début si on le relance après la fin
+        audioElement.currentTime = 0;
         await audioElement.play();
         isPlaying = true;
 
@@ -129,16 +124,27 @@
         playBtn.classList.remove('btn-pulse', 'bg-indigo-600', 'hover:bg-indigo-500');
         playBtn.classList.add('bg-emerald-600', 'hover:bg-emerald-500');
         btnIcon.className = "fa-solid fa-volume-high text-sm animate-pulse";
-        btnText.innerText = "Now Playing 🎵";
+        btnText.innerText = "Now Playing";
         eqOverlay.classList.remove('opacity-0');
         eqOverlay.classList.add('opacity-100');
-        statusText.innerText = "Playing Shibarakiri.mp3 loop. Click to pause/resume.";
+        statusText.innerText = "Now Playing";
 
       } catch (err) {
         console.error("Audio playback error:", err);
-        statusText.innerText = "Error loading Shibarakiri.mp3. Check your filename.";
+        statusText.innerText = "Error loading.";
       }
     }
+
+    // Gestion de la fin de l'audio
+    audioElement.addEventListener('ended', () => {
+      isPlaying = false;
+      playBtn.classList.add('btn-pulse', 'bg-indigo-600', 'hover:bg-indigo-500');
+      playBtn.classList.remove('bg-emerald-600', 'hover:bg-emerald-500');
+      btnIcon.className = "fa-solid fa-play text-sm";
+      btnText.innerText = "Play Audio";
+      eqOverlay.classList.replace('opacity-100', 'opacity-0');
+      statusText.innerText = "Finished. Click to play again.";
+    });
 
     // Trigger on main button click
     playBtn.addEventListener('click', (e) => {
@@ -146,10 +152,10 @@
       if (!isPlaying) {
         handlePlay();
       } else {
-        // Toggle pause/play
+        // Si on clique pendant qu'il joue, on le met en pause (ou on gère selon le souhait, ici pause/reprise si en cours)
         if (audioElement.paused) {
           audioElement.play();
-          btnText.innerText = "Now Playing 🎵";
+          btnText.innerText = "Now Playing";
           eqOverlay.classList.replace('opacity-0', 'opacity-100');
         } else {
           audioElement.pause();
@@ -159,9 +165,9 @@
       }
     });
 
-    // Also trigger play if user clicks anywhere on the page
+    // Also trigger play if user clicks anywhere on the page (seulement si pas en train de jouer)
     document.body.addEventListener('click', () => {
-      if (!isPlaying) {
+      if (!isPlaying && audioElement.paused) {
         handlePlay();
       }
     });
