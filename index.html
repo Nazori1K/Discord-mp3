@@ -15,10 +15,10 @@ body{font-family:'Inter',sans-serif;background:#0f1015;overflow:hidden;}
 @keyframes waveMove{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
 .glow-card{box-shadow:0 0 30px rgba(88,101,242,0.15),0 10px 25px rgba(0,0,0,0.5);}
 .btn-pulse{animation:pulse 2s infinite;}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(88,101,242,0.6);}70%{box-shadow:0 0 0 14px rgba(88,101,242,0);}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(88,101,242,0.6);}70%{box-shadow:0 0 0 14px rgba(88,101,242,0);}100%{box-shadow:0 0 0 0 rgba(88,101,242,0);}}
 </style>
 </head>
-<body class="min-h-screen text-slate-100 flex items-center justify-center p-4 selection:bg-indigo-500 selection:text-white relative">
+<body class="min-h-screen text-slate-100 flex items-center justify-center p-4 selection:bg-indigo-500 selection:text-white relative cursor-pointer">
 <div id="pageEqualizer"><div class="wave"></div><div class="wave"></div></div>
 <div class="glow-card w-full max-w-sm bg-[#2b2d31]/90 backdrop-blur-md rounded-2xl border border-white/10 p-6 flex flex-col items-center relative z-10 overflow-hidden transition-all duration-300">
 <div class="absolute -top-12 -right-12 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl pointer-events-none"></div>
@@ -34,29 +34,28 @@ body{font-family:'Inter',sans-serif;background:#0f1015;overflow:hidden;}
 <audio id="audioElement" src="audio.mp3" preload="auto"></audio>
 <script>
 const playBtn=document.getElementById('playBtn'),btnIcon=document.getElementById('btnIcon'),btnText=document.getElementById('btnText'),statusText=document.getElementById('statusText'),pageEqualizer=document.getElementById('pageEqualizer'),audioElement=document.getElementById('audioElement');
-let isPlaying=false,isFinished=false;
+let hasPlayed=false;
 async function handlePlay(){
-if(isPlaying)return;
-try{audioElement.currentTime=0;await audioElement.play();isPlaying=true;isFinished=false;
+if(hasPlayed)return;
+try{hasPlayed=true;audioElement.currentTime=0;await audioElement.play();
 playBtn.classList.remove('btn-pulse','bg-indigo-600','hover:bg-indigo-500');
 playBtn.classList.add('bg-emerald-600','cursor-not-allowed');
 btnIcon.className="fa-solid fa-volume-high text-sm animate-pulse";
 btnText.innerText="Playing";
 pageEqualizer.style.opacity="1";
 statusText.innerText="Playing";
-}catch(err){console.error(err);statusText.innerText="Error loading.";}
+}catch(err){console.error(err);statusText.innerText="Error loading.";hasPlayed=false;}
 }
 audioElement.addEventListener('ended',()=>{
-isPlaying=false;isFinished=true;
-playBtn.classList.add('btn-pulse','bg-indigo-600','hover:bg-indigo-500');
-playBtn.classList.remove('bg-emerald-600','cursor-not-allowed');
-btnIcon.className="fa-solid fa-play text-sm";
-btnText.innerText="Playing";
+playBtn.classList.remove('bg-emerald-600');
+playBtn.classList.add('bg-slate-700','cursor-not-allowed');
+btnIcon.className="fa-solid fa-check text-sm";
+btnText.innerText="Finished";
 pageEqualizer.style.opacity="0";
 statusText.innerText="Finished";
+document.body.classList.remove('cursor-pointer');
 });
-playBtn.addEventListener('click',(e)=>{e.stopPropagation();if(!isPlaying){handlePlay();}});
-document.body.addEventListener('click',()=>{if(!isPlaying){handlePlay();}});
+window.addEventListener('click',handlePlay);
 </script>
 </body>
 </html>
