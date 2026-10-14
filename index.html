@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Discord Audio Player</title>
+<title>Click Me</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -26,10 +26,10 @@ body{font-family:'Inter',sans-serif;background:#0f1015;overflow:hidden;}
 <div class="relative w-36 h-36 mb-6 rounded-xl overflow-hidden shadow-lg group border border-white/10 bg-[#1e1f29]">
 <img id="coverImg" src="im4ge.png" alt="Audio Cover" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.src='https://placehold.co/400x400/2b2d31/ffffff?text=im4ge.png'">
 </div>
-<h1 class="text-xl font-bold tracking-tight text-white mb-1 text-center">audio.mp3</h1>
-<p class="text-xs font-medium text-slate-400 mb-2 text-center flex items-center justify-center gap-1.5"><i class="fa-brands fa-discord text-indigo-400 text-sm"></i><span>Discord Audio Player</span></p>
+<h1 class="text-xl font-bold tracking-tight text-white mb-1 text-center">Shibarakiri clicker</h1>
+<p class="text-xs font-medium text-slate-400 mb-2 text-center flex items-center justify-center gap-1.5"><i class="fa-brands fa-discord text-indigo-400 text-sm"></i><span>From Discord Profile</span></p>
 <button id="playBtn" class="btn-pulse w-full bg-indigo-600 hover:bg-indigo-500 active:scale-[0.98] text-white font-semibold py-3.5 px-6 rounded-xl transition-all duration-200 flex items-center justify-center gap-2.5 shadow-lg shadow-indigo-600/30"><i id="btnIcon" class="fa-solid fa-play text-sm"></i><span id="btnText">Play Audio</span></button>
-<p id="statusText" class="text-xs text-slate-500 mt-4 text-center transition-all duration-300 min-h-[1rem]">Click anywhere to play audio</p>
+<p id="statusText" class="text-xs text-slate-500 mt-4 text-center transition-all duration-300 min-h-[1rem]">You should click this</p>
 </div>
 <audio id="audioElement" src="audio.mp3" preload="auto"></audio>
 <script>
